@@ -9,14 +9,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-
-// func FindArticles(c *gin.Context) {
-// 	var articles []models.Article
-// 	models.DB.Find(&articles)
-	
-// 	c.JSON(http.StatusOK, gin.H{"data": articles})
-// 	}
-
 func FindArticles(c *gin.Context) {
 	var articles []models.Article
 	var totalRecords int64
