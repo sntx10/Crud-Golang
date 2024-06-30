@@ -1,4 +1,4 @@
-package controller
+package controllers
 
 import (
 	"github.com/gin-gonic/gin"
@@ -7,10 +7,10 @@ import (
 
 type HttpController struct {
 	DB repositories.ArticleRepositoryInterface
-	R  *gin.Engine
+	R  *gin.RouterGroup
 }
 
-func NewHttpController(r *gin.Engine, db repositories.ArticleRepositoryInterface) *HttpController {
+func NewHttpController(r *gin.RouterGroup, db repositories.ArticleRepositoryInterface) *HttpController {
 	return &HttpController{DB: db, R: r}
 }
 

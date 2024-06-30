@@ -7,7 +7,9 @@ import (
 	"github.com/gin-gonic/gin"
 	_ "modernc.org/sqlite"
 
-	"small-crud/internal/controller"
+	"small-crud/internal/controllers"
+	"small-crud/internal/middlewares"
+
 	"small-crud/internal/repositories/sqlite"
 )
 
@@ -21,9 +23,17 @@ func main() {
 	defer database.Close()
 
 	articleRepository := sqlite.NewSqliteRepository(database)
+	userRepo := sqlite.NewUserRepository(database)
 
-	httpController := controller.NewHttpController(r, articleRepository)
-	httpController.Init()
+	authController := controllers.NewAuthController(userRepo)
+	authController.Init(r)
+
+	articleRoutes := r.Group("/articles")
+	articleRoutes.Use(middlewares.AuthMiddleware())
+	{
+		httpController := controllers.NewHttpController(articleRoutes, articleRepository)
+		httpController.Init()
+	}
 
 	r.Run()
 }

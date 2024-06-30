@@ -1,30 +1,29 @@
-package controller
+package controllers
 
 import (
 	"net/http"
 	"strconv"
 
+	"github.com/gin-gonic/gin"
 	"small-crud/internal/models"
 	"small-crud/internal/repositories"
-
-	"github.com/gin-gonic/gin"
 )
 
 type ArticleController struct {
-	r    *gin.Engine
+	r    *gin.RouterGroup
 	repo repositories.ArticleRepositoryInterface
 }
 
-func NewArticleController(r *gin.Engine, repo repositories.ArticleRepositoryInterface) *ArticleController {
+func NewArticleController(r *gin.RouterGroup, repo repositories.ArticleRepositoryInterface) *ArticleController {
 	return &ArticleController{r: r, repo: repo}
 }
 
 func (a *ArticleController) Init() {
-	a.r.GET("/articles", a.FindArticles)
-	a.r.GET("/articles/:id", a.FindArticle)
-	a.r.POST("/articles", a.CreateArticle)
-	a.r.PUT("/articles/:id", a.UpdateArticle)
-	a.r.DELETE("/articles/:id", a.DeleteArticle)
+	a.r.GET("/", a.FindArticles)
+	a.r.GET("/:id", a.FindArticle)
+	a.r.POST("/", a.CreateArticle)
+	a.r.PUT("/:id", a.UpdateArticle)
+	a.r.DELETE("/:id", a.DeleteArticle)
 }
 
 func (a *ArticleController) FindArticles(c *gin.Context) {
@@ -103,5 +102,3 @@ func (a *ArticleController) DeleteArticle(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"data": true})
 }
-
-

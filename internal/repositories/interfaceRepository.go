@@ -9,3 +9,8 @@ type ArticleRepositoryInterface interface {
     UpdateArticle(models.Article) error
     DeleteArticle(int) error
 }
+
+type UserRepositoryInterface interface{
+	CreateUser(user models.User) (int64, error)
+	FindUserByEmail(email string) (models.User, error)
+}
