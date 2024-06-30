@@ -2,19 +2,19 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"database/sql"
+	"small-crud/internal/repositories"
 )
 
 type HttpController struct {
-	DB *sql.DB
+	DB repositories.ArticleRepositoryInterface
 	R  *gin.Engine
 }
 
-func NewHttpController(r *gin.Engine, db *sql.DB) *HttpController {
+func NewHttpController(r *gin.Engine, db repositories.ArticleRepositoryInterface) *HttpController {
 	return &HttpController{DB: db, R: r}
 }
 
 func (h *HttpController) Init() {
-    articleController := NewArticleController(h.R, h.DB)
-    articleController.Init()
+	articleController := NewArticleController(h.R, h.DB)
+	articleController.Init()
 }
