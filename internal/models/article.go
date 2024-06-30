@@ -4,10 +4,10 @@ import "time"
 
 
 type Article struct {
-	Id int `json:"id" gorm:"type:int;primary_key"`
-	Title string `json:"title" gorm:"type:varchar(255)"`
-	Date time.Time `json:"date" gorm:"type:datetime"`
-	Content string `json:"content" gorm:"type:varchar(255)"`
+	Id int `json:"id"`
+	Title string `json:"title"`
+	Date time.Time `json:"date"`
+	Content string `json:"content"`
 }
 
 type CreateArticleInput struct {

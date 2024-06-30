@@ -1,25 +1,28 @@
 package main
 
 import (
+	"database/sql"
 	"github.com/gin-gonic/gin"
+	"log"
+	_ "modernc.org/sqlite"
 
-	"small-crud/controller"
-	"small-crud/models" //new
+	"small-crud/internal/controller"
+	"small-crud/internal/models"
 )
 
 func main() {
 	r := gin.Default()
-
-	models.ConnectDatabase()
-	r.GET("/articles", controller.FindArticles)
-	r.GET("/article/:title", controller.FindArticle)
-	r.POST("/article", controller.CreateArticle)
-	r.PATCH("/article/:id", controller.UpdateArticle)
-	r.DELETE("/article/:id", controller.DeleteArticle)
-	r.Run()
-
-	err := r.Run()
+	
+	database, err := sql.Open("sqlite", "test.db")
 	if err != nil {
-		return
+		log.Fatal("Failed to connect to database!", err)
 	}
+	defer database.Close()
+
+	models.ConnectDatabase(database)
+
+	httpController := controller.NewHttpController(r, database)
+	httpController.Init()
+
+	r.Run()
 }
