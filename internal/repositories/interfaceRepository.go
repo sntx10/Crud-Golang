@@ -13,4 +13,7 @@ type ArticleRepositoryInterface interface {
 type UserRepositoryInterface interface{
 	CreateUser(user models.User) (int64, error)
 	FindUserByEmail(email string) (models.User, error)
+	GetAllUsers() ([]models.User, error)
+	UpdateUser(user models.User) error
+	DeleteUser(email, password string) error
 }

@@ -35,3 +35,45 @@ func (r *UserRepository) FindUserByEmail(email string) (models.User, error) {
 	err := row.Scan(&user.Id, &user.Username, &user.Email, &user.Password)
 	return user, err
 }
+
+
+func (r *UserRepository) GetAllUsers() ([]models.User, error) {
+	rows, err := r.DB.Query("SELECT id, username, email, password FROM users")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var users []models.User
+	for rows.Next() {
+		var user models.User
+		if err := rows.Scan(&user.Id, &user.Username, &user.Email, &user.Password); err != nil {
+			return nil, err
+		}
+		users = append(users, user)
+	}
+
+	return users, nil
+}
+
+func (r *UserRepository) UpdateUser(user models.User) error {
+	stmt, err := r.DB.Prepare("UPDATE users SET username = ?, email = ?, password = ? WHERE id = ?")
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(user.Username, user.Email, user.Password, user.Id)
+	return err
+}
+
+func (r *UserRepository) DeleteUser(email, password string) error {
+	stmt, err := r.DB.Prepare("DELETE FROM users WHERE email = ? AND password = ?")
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(email, password)
+	return err
+}
